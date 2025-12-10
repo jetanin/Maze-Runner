@@ -15,7 +15,7 @@ public class Main {
     private static final String MAZE100X90 = "MAZE/m100_90.txt";
     private static final String MAZE100X100 = "MAZE/m100_100.txt";
 
-    private static final int BLOCK_SIZE = 6;
+    private static final int BLOCK_SIZE = 40;
     MazeFrame frame;
 
     private void initFrame(String mazeFile) {

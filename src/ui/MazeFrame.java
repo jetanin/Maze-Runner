@@ -2,6 +2,8 @@ package ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
@@ -36,6 +38,7 @@ public class MazeFrame extends JFrame {
             if (mazeData == null) return;
             
             char[][] maze = mazeData.getMaze();
+            int[][] mazeInt = mazeData.getMazeInt();
             int N = mazeData.getN();
             int M = mazeData.getM();
             
@@ -62,6 +65,36 @@ public class MazeFrame extends JFrame {
                     // Draw border
                     g.setColor(Color.GRAY);
                     g.drawRect(x, y, blockSize, blockSize);
+
+                    // Draw weight text for numeric cells (non-wall)
+                    if (cell != '#') {
+                        int weight = mazeInt[i][j];
+                        if (weight >= 0) {
+                            // Choose a readable font size relative to blockSize
+                            int fontSize = Math.max(10, blockSize - blockSize / 3);
+                            Font font = g.getFont().deriveFont((float) fontSize);
+                            g.setFont(font);
+
+                            // Text color: dark for light cells, light for dark cells
+                            Color textColor;
+                            if (color == Color.BLACK || color == Color.RED || color == Color.GREEN) {
+                                textColor = Color.WHITE;
+                            } else {
+                                textColor = Color.DARK_GRAY;
+                            }
+                            g.setColor(textColor);
+
+                            String text = String.valueOf(weight);
+                            FontMetrics fm = g.getFontMetrics();
+                            int textWidth = fm.stringWidth(text);
+                            int textAscent = fm.getAscent();
+
+                            // Center text within the block
+                            int tx = x + (blockSize - textWidth) / 2;
+                            int ty = y + (blockSize + textAscent) / 2 - 2; // slight upward adjustment
+                            g.drawString(text, tx, ty);
+                        }
+                    }
                 }
             }
         }
