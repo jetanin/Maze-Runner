@@ -2,7 +2,7 @@ package ui;
 
 public class Main {
     private static final String MAZE15X15 = "MAZE/m15_15.txt";
-    private static final String MAZE24X20 = "MAZE/m15_15.txt";
+    private static final String MAZE24X20 = "MAZE/m24_20.txt";
     private static final String MAZE30X30 = "MAZE/m30_30.txt";
     private static final String MAZE33X35 = "MAZE/m33_35.txt";
     private static final String MAZE40X40 = "MAZE/m40_40.txt";
@@ -21,7 +21,7 @@ public class Main {
     private void initFrame(String mazeFile) {
         try {
             MazeData data = new MazeData(mazeFile);
-            frame = new MazeFrame("Maze Solver", data.getN() * BLOCK_SIZE, data.getM() * BLOCK_SIZE);
+            frame = new MazeFrame("Maze Solver", data.getN() * BLOCK_SIZE, data.getM() * BLOCK_SIZE, data, BLOCK_SIZE);
         } catch (Exception e) {
             System.err.println("Failed to initialize frame: " + e.getMessage());
         }

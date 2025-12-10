@@ -4,16 +4,25 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MazeData {
     private int N, M;
-    private char[][] maze;
+    private int[][] maze;
+    private char[][] mazeChars;
 
     public int getN(){
         return N;
     }
     public int getM(){
         return M;
+    }
+    public char[][] getMaze(){
+        return mazeChars;
+    }
+    public int[][] getMazeInt(){
+        return maze;
     }
 
     public MazeData(String fileName) {
@@ -31,26 +40,65 @@ public class MazeData {
                 throw new IllegalArgumentException("File is empty: " + fileName);
             }
 
-            String nmLine = sc.nextLine();
-            String[] nm = nmLine.split("\\s+");
-            if (nm.length != 2) {
-                throw new IllegalArgumentException("Invalid maze dimensions in file: " + fileName);
+            // Read all lines
+            java.util.List<String> lines = new java.util.ArrayList<>();
+            while (sc.hasNextLine()) {
+                lines.add(sc.nextLine());
             }
 
-            N = Integer.parseInt(nm[0]);
-            M = Integer.parseInt(nm[1]);
-            maze = new char[N][M];
+            if (lines.isEmpty()) {
+                throw new IllegalArgumentException("File is empty: " + fileName);
+            }
 
+            N = lines.size();
+            
+            // Parse the first line to determine M and detect format
+            String firstLine = lines.get(0);
+            Pattern pattern = Pattern.compile("\"([^\"]+)\"|([#SG])");
+            Matcher matcher = pattern.matcher(firstLine);
+            
+            java.util.List<String> tokens = new java.util.ArrayList<>();
+            while (matcher.find()) {
+                if (matcher.group(1) != null) {
+                    tokens.add(matcher.group(1));
+                } else {
+                    tokens.add(matcher.group(2));
+                }
+            }
+            
+            M = tokens.size();
+            maze = new int[N][M];
+            mazeChars = new char[N][M];
+
+            // Parse all lines
             for (int i = 0; i < N; i++) {
-                if (!sc.hasNextLine()) {
-                    throw new IllegalArgumentException("Incomplete maze data in file: " + fileName);
+                String line = lines.get(i);
+                matcher = pattern.matcher(line);
+                tokens.clear();
+                
+                while (matcher.find()) {
+                    if (matcher.group(1) != null) {
+                        tokens.add(matcher.group(1));
+                    } else {
+                        tokens.add(matcher.group(2));
+                    }
                 }
-                String line = sc.nextLine();
-                if (line.length() != M) {
-                    throw new IllegalArgumentException("Invalid maze row length at line " + (i + 2) + " in file: " + fileName);
+                
+                if (tokens.size() != M) {
+                    throw new IllegalArgumentException("Invalid maze row length at line " + (i + 1) + 
+                        ": expected " + M + " cells, got " + tokens.size());
                 }
+                
                 for (int j = 0; j < M; j++) {
-                    maze[i][j] = line.charAt(j);
+                    String token = tokens.get(j);
+                    mazeChars[i][j] = token.charAt(0);
+                    
+                    try {
+                        maze[i][j] = Integer.parseInt(token);
+                    } catch (NumberFormatException e) {
+                        // Handle special characters like S (start), G (goal), # (wall)
+                        maze[i][j] = -1;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -63,3 +111,4 @@ public class MazeData {
         }
     }
 }
+
