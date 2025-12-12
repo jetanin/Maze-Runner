@@ -15,7 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.WindowConstants;
-
 import th.ac.kmutt.cpe.algorithm.maze.structure.MazeData;
 
 public class MazeFrame  extends JFrame{
@@ -86,7 +85,7 @@ public class MazeFrame  extends JFrame{
         JPanel panel = new JPanel();
         panel.add(new JLabel("Algorithm:"));
         this.algorithmBox = new JComboBox<>(new String[]{
-            "Genetic", "Dijkstra", "A*", "BFS" 
+            "PureGA", "Genetic", "Dijkstra", "A*", "BFS"
         });
         panel.add(algorithmBox);
 

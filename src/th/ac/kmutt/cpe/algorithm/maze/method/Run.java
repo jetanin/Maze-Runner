@@ -9,6 +9,7 @@ public class Run {
     AStar aStar = new AStar();
     Dijkstra dijkstra = new Dijkstra();
     GeneticAlgorithm ga = new GeneticAlgorithm();
+    PureGA pga = new PureGA();
     Position pos;
 
     public Run(MazeData data, MazeFrame frame) {
@@ -20,6 +21,7 @@ public class Run {
         aStar.data = data; aStar.frame = frame; aStar.pos = pos;
         dijkstra.data = data; dijkstra.frame = frame; dijkstra.pos = pos;
         ga.data = data; ga.frame = frame; ga.pos = pos;
+        pga.data = data; pga.frame = frame; pga.pos = pos;
         pos.data = data; pos.frame = frame;
     }
 
@@ -29,6 +31,7 @@ public class Run {
         aStar.data = newData;
         dijkstra.data = newData;
         ga.data = newData;
+        pga.data = newData;
         pos.data = newData;
     }
 
@@ -50,6 +53,9 @@ public class Run {
                 return;
             case "Genetic":
                 ga.runGenetic();
+                return;
+            case "PureGA":
+                pga.runPureGenetic();
                 return;
             case "Dijkstra":
             default:
